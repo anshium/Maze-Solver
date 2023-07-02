@@ -6,7 +6,7 @@ code = {0: "0", 1: "L", 2: "T", 3: "R", 4: "B", 5: "LT", 6: "TR", 7: "RB", 8: "L
 for i in range(len(code.keys())):
     code[i] = ''.join(sorted(code[i]))
 
-print(code)
+# print(code)
 
 stack = [] # holds elements as [i, j]
 
@@ -14,8 +14,8 @@ grid = []
 
 # n : num_rows
 # m : num_columns
-n = 2
-m = 2
+n = 16
+m = 16
 
 # fill the grid
 for i in range(n):
@@ -28,12 +28,13 @@ visited = []
 for i in range(n * m):
     visited.append(0)
 
-print(visited)
+# print(visited)
 
 # I am maintaining the visited count using a py list where 1 at m * i + j th
 # position tells that the cell (i, j) (0-indexed) is visited.
 
 def getUnivisitedNeighbors(i, j):
+    # print(visited)
     unvisitedNeighbors = [] # Values would be stored in the form of (i, j)
     if(j - 1 >= 0 and visited[m * i + (j - 1)] == 0):
         unvisitedNeighbors.append([i, j - 1])
@@ -49,6 +50,7 @@ def getUnivisitedNeighbors(i, j):
 
     return unvisitedNeighbors
 
+visited[1 * m + 0] = 1
 stack.append([1, 0])
 
 
@@ -68,13 +70,14 @@ def removeWall(cell_1, cell_2):
     elif(abs(difference_cell[1]) == 1):
         wall_at = 1
 
-    # print(code[grid[cell_1[0]][cell_1[1]]])
+    # # print(code[grid[cell_1[0]][cell_1[1]]])
     
     # return
     str1 = code[grid[cell_1[0]][cell_1[1]]]
     str2 = code[grid[cell_2[0]][cell_2[1]]]
 
-    print(str1)
+    # print(str1)
+    # print(str2)
     
     if(wall_at == 1):
         if(difference_cell[wall_at] == -1):
@@ -86,12 +89,16 @@ def removeWall(cell_1, cell_2):
     
     elif(wall_at == 0):
         if(difference_cell[wall_at] == -1):
-            str1.replace("T", '')
-            str2.replace("B", '')
+            str1 = str1.replace("T", '')
+            str2 = str2.replace("B", '')
         elif(difference_cell[wall_at] == 1):
-            str1.replace("B", '')
-            str2.replace("T", '')
-
+            # print("here")
+            str1 = str1.replace("B", '')
+            str2 = str2.replace("T", '')
+    # print(difference_cell)
+    # print(str1)
+    # print(str2)
+    
     key_1 = [key for key, value in code.items() if value == ''.join(sorted(str1))][0]
     key_2 = [key for key, value in code.items() if value == ''.join(sorted(str2))][0]
 
@@ -100,16 +107,17 @@ def removeWall(cell_1, cell_2):
 
     return
 
-
-
+removeWall([0, 0], [1, 0])
+# print(grid[1][0])
 
 while(len(stack) != 0):
     current = stack.pop()
 
-    print(grid)
+    # print(grid)
     
     # if the current cell has any neighbors which have not been visited
     un = getUnivisitedNeighbors(current[0], current[1])
+    # print(un)
     if(len(un) == 0):
         continue
 
@@ -117,7 +125,7 @@ while(len(stack) != 0):
 
     # choose one of the unvisited neighbours
     un_chosen = random.choice(un)
-    
+    # print(un_chosen)
     # remove wall between current cell and the chosen cell
     removeWall(current, un_chosen)
 
@@ -126,3 +134,4 @@ while(len(stack) != 0):
     stack.append(un_chosen)
    
 print(grid)
+
